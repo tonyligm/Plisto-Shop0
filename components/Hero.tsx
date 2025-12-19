@@ -40,7 +40,11 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
         </div>
       </div>
       <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="https://picsum.photos/seed/shop/1200/800" alt="Global shopping" />
+        <img 
+          className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" 
+          src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2000&auto=format&fit=crop" 
+          alt="Premium Global Goods - Home Decor" 
+        />
       </div>
     </div>
   );
