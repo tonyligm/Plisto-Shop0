@@ -14,7 +14,7 @@ export const PRODUCTS: Product[] = [
     description: 'Heat-resistant linen placemat for elegant dining settings.',
     price: 12.99,
     currency: 'USD',
-    imageUrl: 'https://picsum.photos/seed/placemat1/600/600',
+    imageUrl: 'https://ae-pic-a1.aliexpress-media.com/kf/Sa695e2364ccd4f6db6234103d7b09133C.jpg_960x960q75.jpg',
     externalUrl: 'https://www.aliexpress.com/item/placemat-a.html',
     category: 'Placemat',
     isNew: true,
