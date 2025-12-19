@@ -10,12 +10,12 @@ export const PRODUCTS: Product[] = [
   // --- PLACEMAT SERIES ---
   {
     id: 'pm-1',
-    name: 'Nordic Style Linen Placemat - Pattern A',
-    description: 'Heat-resistant linen placemat for elegant dining settings.',
-    price: 12.99,
+    name: 'Nordic Solid Double Sides Leather Dining Mat',
+    description: 'Heat Insulation Placemat Home Waterproof Oil Proof Hotel Rectangle Pad',
+    price: 4.99,
     currency: 'USD',
     imageUrl: 'https://ae-pic-a1.aliexpress-media.com/kf/Sa695e2364ccd4f6db6234103d7b09133C.jpg_960x960q75.jpg',
-    externalUrl: 'https://www.aliexpress.com/item/placemat-a.html',
+    externalUrl: 'https://www.aliexpress.com/item/1005008132886398.html',
     category: 'Placemat',
     isNew: true,
     rating: 4.8
