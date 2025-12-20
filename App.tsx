@@ -96,7 +96,7 @@ const App: React.FC = () => {
                 return (
                   <section key={cat}>
                     <div className="flex items-center justify-between mb-12 border-b border-gray-100 pb-4">
-                      <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                      <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight uppercase">
                         {getTranslatedCategory(cat)}
                       </h2>
                     </div>
