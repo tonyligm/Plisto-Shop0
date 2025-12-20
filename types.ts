@@ -1,8 +1,10 @@
 
+import { LanguageCode } from './i18n';
+
 export interface Product {
   id: string;
-  name: string;
-  description: string;
+  name: Record<LanguageCode, string>;
+  description: Record<LanguageCode, string>;
   price: number;
   currency: string;
   imageUrl: string;

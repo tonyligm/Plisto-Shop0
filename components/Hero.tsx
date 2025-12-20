@@ -30,7 +30,7 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
                   </a>
                 </div>
                 <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <a href="#" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-brand bg-brand-light hover:bg-brand/20 md:py-4 md:text-lg md:px-10 transition-colors">
+                  <a href="#" className="w-full flex items-center justify-center px-8 py-3 border border-brand text-base font-medium rounded-md text-brand bg-white hover:bg-brand-light md:py-4 md:text-lg md:px-10 transition-colors shadow-sm">
                     {t.heroNew}
                   </a>
                 </div>
@@ -40,11 +40,7 @@ const Hero: React.FC<HeroProps> = ({ t }) => {
         </div>
       </div>
       <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-        <img 
-          className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" 
-          src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=2000&auto=format&fit=crop" 
-          alt="Premium Global Goods - Home Decor" 
-        />
+        <img className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full" src="https://picsum.photos/seed/shop/1200/800" alt="Global shopping" />
       </div>
     </div>
   );
