@@ -7,10 +7,10 @@ interface HeroProps {
 }
 
 const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=2000&h=800",
-  "https://images.unsplash.com/photo-1616489953149-998175a9ee4a?auto=format&fit=crop&q=80&w=2000&h=800",
-  "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&q=80&w=2000&h=800",
-  "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=2000&h=800"
+  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=2000&h=800",
+  "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&q=80&w=2000&h=800",
+  "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&q=80&w=2000&h=800",
+  "https://images.unsplash.com/photo-1616627547584-bf28cee262db?auto=format&fit=crop&q=80&w=2000&h=800"
 ];
 
 const Hero: React.FC<HeroProps> = ({ t }) => {
