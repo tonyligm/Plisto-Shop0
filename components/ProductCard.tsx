@@ -40,9 +40,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, t, langCode, isRever
         </div>
       </div>
 
-      {/* Details Section */}
-      <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left">
-        <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+      {/* Details Section - Left Aligned */}
+      <div className="w-full md:w-1/2 flex flex-col justify-center items-start text-left">
+        <div className="flex items-center justify-start gap-3 mb-4">
           {product.rating && (
             <div className="flex items-center text-yellow-400">
               {[...Array(5)].map((_, i) => (
@@ -59,11 +59,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, t, langCode, isRever
           {productName}
         </h3>
         
-        <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-xl mx-auto md:mx-0">
+        <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-xl">
           {productDescription}
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center gap-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
           <div className="flex items-baseline font-black text-gray-900">
             <span className="text-2xl">{product.currency === 'USD' ? '$' : product.currency}</span>
             <span className="text-4xl ml-1">{product.price.toFixed(2)}</span>

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Translations } from '../i18n';
 
 interface HeroProps {
@@ -7,104 +7,139 @@ interface HeroProps {
 }
 
 const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=1200&h=800",
-  "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80&w=1200&h=800",
-  "https://images.unsplash.com/photo-1616489953149-998175a9ee4a?auto=format&fit=crop&q=80&w=1200&h=800",
-  "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=1200&h=800"
+  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=2000&h=800",
+  "https://images.unsplash.com/photo-1616489953149-998175a9ee4a?auto=format&fit=crop&q=80&w=2000&h=800",
+  "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&q=80&w=2000&h=800",
+  "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&q=80&w=2000&h=800"
 ];
 
 const Hero: React.FC<HeroProps> = ({ t }) => {
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [offsetX, setOffsetX] = useState(0);
+  const timerRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
+  const startAutoPlay = useCallback(() => {
+    stopAutoPlay();
+    timerRef.current = window.setInterval(() => {
       setCurrentIdx((prev) => (prev + 1) % HERO_IMAGES.length);
     }, 5000);
-    return () => clearInterval(timer);
   }, []);
 
+  const stopAutoPlay = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    startAutoPlay();
+    return () => stopAutoPlay();
+  }, [startAutoPlay, stopAutoPlay]);
+
+  const handleStart = (e: React.MouseEvent | React.TouchEvent) => {
+    stopAutoPlay();
+    setIsDragging(true);
+    const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    setStartX(x);
+  };
+
+  const handleMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging) return;
+    const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const diff = x - startX;
+    setOffsetX(diff);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    
+    const threshold = 50; // min distance for swipe
+    if (offsetX > threshold) {
+      // Swipe Right (Prev)
+      setCurrentIdx((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+    } else if (offsetX < -threshold) {
+      // Swipe Left (Next)
+      setCurrentIdx((prev) => (prev + 1) % HERO_IMAGES.length);
+    }
+    
+    setOffsetX(0);
+    startAutoPlay();
+  };
+
+  const goToSlide = (index: number) => {
+    stopAutoPlay();
+    setCurrentIdx(index);
+    startAutoPlay();
+  };
+
   return (
-    <div className="relative bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto">
-        <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-          {/* Decorative Triangle Slant */}
-          <svg 
-            className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2 z-10" 
-            fill="currentColor" 
-            viewBox="0 0 100 100" 
-            preserveAspectRatio="none" 
-            aria-hidden="true"
-          >
-            <polygon points="50,0 100,0 50,100 0,100" />
-          </svg>
-
-          <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-            <div className="sm:text-center lg:text-left">
-              <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block xl:inline">{t.heroTitle.split(' ')[0]} {t.heroTitle.split(' ')[1]}</span>{' '}
-                <span className="block text-brand xl:inline">{t.heroTitle.split(' ').slice(2).join(' ')}</span>
-              </h1>
-              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 leading-relaxed">
-                {t.heroSubtitle}
-              </p>
-              <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                <div className="rounded-xl shadow-lg shadow-brand/20">
-                  <a href="#products" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-brand hover:bg-brand-dark md:py-4 md:text-lg md:px-10 transition-all transform hover:-translate-y-0.5">
-                    {t.heroExplore}
-                  </a>
-                </div>
-                <div className="mt-3 sm:mt-0 sm:ml-3">
-                  <a href="#" className="w-full flex items-center justify-center px-8 py-3 border-2 border-brand text-base font-bold rounded-xl text-brand bg-white hover:bg-brand-light md:py-4 md:text-lg md:px-10 transition-all shadow-sm">
-                    {t.heroNew}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-
-      {/* Hero Carousel Section */}
-      <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 h-56 sm:h-72 md:h-96 lg:h-full relative overflow-hidden bg-gray-100">
+    <div 
+      className="relative w-full bg-white overflow-hidden h-[300px] sm:h-[450px] lg:h-[600px] select-none touch-pan-y"
+      onMouseDown={handleStart}
+      onMouseMove={handleMove}
+      onMouseUp={handleEnd}
+      onMouseLeave={handleEnd}
+      onTouchStart={handleStart}
+      onTouchMove={handleMove}
+      onTouchEnd={handleEnd}
+    >
+      {/* Sliding Image Container */}
+      <div 
+        className={`flex h-full w-full transition-transform ${isDragging ? 'duration-0' : 'duration-700 ease-in-out'}`}
+        style={{ transform: `translateX(calc(-${currentIdx * 100}% + ${offsetX}px))` }}
+      >
         {HERO_IMAGES.map((img, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentIdx ? 'opacity-100 z-0' : 'opacity-0 z-[-1]'
-            }`}
-          >
+          <div key={index} className="relative flex-shrink-0 w-full h-full overflow-hidden">
+            <div className="absolute inset-0 bg-black/5 z-10"></div>
             <img 
-              className="h-full w-full object-cover transform scale-105 animate-slow-zoom" 
+              className="h-full w-full object-cover pointer-events-none"
               src={img} 
               alt={`Slide ${index + 1}`} 
             />
           </div>
         ))}
-        
-        {/* Navigation Dots Overlay */}
-        <div className="absolute bottom-6 right-6 flex space-x-2 z-20">
-          {HERO_IMAGES.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIdx(index)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                index === currentIdx ? 'w-8 bg-brand shadow-lg' : 'w-2 bg-white/50 hover:bg-white'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
       </div>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes slow-zoom {
-          from { transform: scale(1.05); }
-          to { transform: scale(1); }
-        }
-        .animate-slow-zoom {
-          animation: slow-zoom 5s ease-out forwards;
-        }
-      `}} />
+      {/* Navigation Dots */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-3 z-30">
+        {HERO_IMAGES.map((_, index) => (
+          <button
+            key={index}
+            onClick={(e) => { e.stopPropagation(); goToSlide(index); }}
+            className={`transition-all duration-300 rounded-full ${
+              index === currentIdx 
+                ? 'w-12 h-1.5 bg-white shadow-lg' 
+                : 'w-2.5 h-1.5 bg-white/40 hover:bg-white/70'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Side Navigation Arrows */}
+      <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-4 sm:px-8 z-20 pointer-events-none">
+        <button 
+          onClick={(e) => { e.stopPropagation(); stopAutoPlay(); setCurrentIdx((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length); startAutoPlay(); }}
+          className="pointer-events-auto p-2 rounded-full bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white transition-all transform hover:scale-110 opacity-0 lg:opacity-100 group-hover:opacity-100"
+        >
+          <svg className="h-6 w-6 sm:h-8 sm:w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button 
+          onClick={(e) => { e.stopPropagation(); stopAutoPlay(); setCurrentIdx((prev) => (prev + 1) % HERO_IMAGES.length); startAutoPlay(); }}
+          className="pointer-events-auto p-2 rounded-full bg-white/10 hover:bg-white/30 backdrop-blur-sm text-white transition-all transform hover:scale-110 opacity-0 lg:opacity-100 group-hover:opacity-100"
+        >
+          <svg className="h-6 w-6 sm:h-8 sm:w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 };
